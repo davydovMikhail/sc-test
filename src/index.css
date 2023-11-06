@@ -416,7 +416,7 @@ textarea:focus, input:focus{
   max-width: 1498px;
   margin: 0 auto;
   padding-top: 220px;
-  background-color: rgba(40, 255, 87, 0.30);
+  background-color: rgba(40, 255, 87, 0.10);
   padding-right: 15px;
   padding-left: 15px;
 }
