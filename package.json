@@ -31,6 +31,7 @@
     "typechain": "^8.3.1"
   },
   "scripts": {
+    "generate-typechain": "typechain --target ethers-v5 --out-dir src/typechain src/abi/*.json",
     "start": "react-scripts start",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build ",

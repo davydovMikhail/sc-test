@@ -21,3 +21,15 @@ export function ClearSegments(): MainAction {
 export function ClearSplits(): MainAction {
     return {type: MainActionTypes.CLEAR_SPLITS}
 }
+export function SetEthBal(bal: number): MainAction {
+    return {type: MainActionTypes.SET_ETH_BAL, payload: bal}
+}
+export function SetSplitBal(bal: number): MainAction {
+    return {type: MainActionTypes.SET_SPLIT_BAL, payload: bal}
+}
+export function SetEthPayout(payout: number): MainAction {
+    return {type: MainActionTypes.SET_ETH_PAYOUT, payload: payout}
+}
+export function SetSplitPayout(payout: number): MainAction {
+    return {type: MainActionTypes.SET_SPLIT_PAYOUT, payload: payout}
+}

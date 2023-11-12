@@ -7,8 +7,8 @@ export enum Status {
 }
 
 export enum Currency {
-    Split,
-    Ether
+    Split = "SPLIT",
+    Ether = "ETH"
 }
 
 export interface MainState {
@@ -17,6 +17,10 @@ export interface MainState {
     currency: Currency;
     segmentGames: any[];
     splitGames: any[];
+    ethBalance: number;
+    splitBalance: number;
+    maxEthPayout: number;
+    maxSplitPayout: number;
 }
 
 export enum MainActionTypes {
@@ -26,7 +30,11 @@ export enum MainActionTypes {
     PUSH_SEGMENT = 'PUSH_SEGMENT',
     PUSH_SPLIT = 'PUSH_SPLIT',
     CLEAR_SEGMENTS = 'CLEAR_SEGMENTS',
-    CLEAR_SPLITS = 'CLEAR_SPLITS'
+    CLEAR_SPLITS = 'CLEAR_SPLITS',
+    SET_ETH_BAL = 'SET_ETH_BAL',
+    SET_SPLIT_BAL = 'SET_SPLIT_BAL',
+    SET_ETH_PAYOUT = 'SET_ETH_PAYOUT',
+    SET_SPLIT_PAYOUT = 'SET_SPLIT_PAYOUT',
 } 
 
 
@@ -56,6 +64,22 @@ interface ClearSegmentsAction {
 interface ClearSplitsAction {
     type: MainActionTypes.CLEAR_SPLITS;
 }
+interface SetEthBalAction {
+    type: MainActionTypes.SET_ETH_BAL;
+    payload: number;
+}
+interface SetSplitBalAction {
+    type: MainActionTypes.SET_SPLIT_BAL;
+    payload: number;
+}
+interface SetEthPayoutAction {
+    type: MainActionTypes.SET_ETH_PAYOUT;
+    payload: number;
+}
+interface SetSplitPayoutAction {
+    type: MainActionTypes.SET_SPLIT_PAYOUT;
+    payload: number;
+}
 
 export type MainAction = 
     SetNotificationAction |
@@ -64,4 +88,8 @@ export type MainAction =
     PushSegmentAction |
     PushSplitAction |
     ClearSegmentsAction |
-    ClearSplitsAction;
+    ClearSplitsAction |
+    SetEthBalAction |
+    SetSplitBalAction |
+    SetEthPayoutAction |
+    SetSplitPayoutAction;

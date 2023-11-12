@@ -5,7 +5,11 @@ const initialState: MainState = {
     status: Status.Guess,
     currency: Currency.Split,
     segmentGames: [],
-    splitGames: []
+    splitGames: [],
+    ethBalance: 0,
+    splitBalance: 0, 
+    maxEthPayout: 0,
+    maxSplitPayout: 0
 }
 
 export const mainReducer = (state: MainState = initialState, action: MainAction): MainState => {
@@ -24,6 +28,14 @@ export const mainReducer = (state: MainState = initialState, action: MainAction)
             return {...state, segmentGames: [] }
         case MainActionTypes.CLEAR_SPLITS:
             return {...state, splitGames: [] }
+        case MainActionTypes.SET_ETH_BAL:
+            return {...state, ethBalance: action.payload}
+        case MainActionTypes.SET_SPLIT_BAL:
+            return {...state, splitBalance: action.payload}
+        case MainActionTypes.SET_ETH_PAYOUT:
+            return {...state, maxEthPayout: action.payload}
+        case MainActionTypes.SET_SPLIT_PAYOUT:
+            return {...state, maxSplitPayout: action.payload}
         default:
             return state
     }

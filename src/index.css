@@ -155,6 +155,16 @@ textarea {
   -webkit-appearance: button; 
   font: inherit; 
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 details {
   display: block;
 }
@@ -634,7 +644,7 @@ textarea:focus, input:focus{
   text-transform: uppercase;
 
   margin-bottom: 12px;
-
+  cursor: pointer;
 }
 .decision__left {
   border-radius: 12px;
@@ -646,6 +656,7 @@ textarea:focus, input:focus{
   font-weight: 700;
   line-height: 28px; /* 116.667% */
   text-transform: uppercase;
+  cursor: pointer;
 }
 .decision__right {
   border-radius: 12px;
@@ -657,6 +668,7 @@ textarea:focus, input:focus{
   font-weight: 700;
   line-height: 28px; /* 116.667% */
   text-transform: uppercase;
+  cursor: pointer;
 }
 
 .game {
@@ -669,7 +681,7 @@ textarea:focus, input:focus{
   max-width: 892px;
   display: grid;
   gap: 24px;
-  grid-template-columns: 0.45fr 0.45fr 1fr;
+  grid-template-columns: 0.47fr 0.47fr 1.01fr;
   grid-template-rows: auto;
   grid-template-areas: "from to amount";
 }
@@ -738,6 +750,7 @@ textarea:focus, input:focus{
   border: 0;
   padding: 6px 10px;
   margin-right: 8px;
+  cursor: pointer;
 }
 .bid__split {
   display: flex;
@@ -751,6 +764,7 @@ textarea:focus, input:focus{
   background: #FFF;
   border: 0;
   padding: 6px 10px;
+  cursor: pointer;
 }
 .bid__input {
   background: transparent;
@@ -774,6 +788,7 @@ textarea:focus, input:focus{
   font-size: 18px;
   font-weight: 400;
   line-height: 32px; 
+  cursor: pointer;
 }
 .split {
     max-width: 892px;
