@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Currswitcher from "./currswitcher";
 import { useTypedSelector } from "../storeHooks/useTypedSelector";
 import { Currency } from "../types/main";
@@ -9,20 +9,25 @@ const Segment = () => {
     const [from, setFrom] = useState(2500);
     const [to, setTo] = useState(7500);
     const [amount, setAmount] = useState(1);
+    const firstUpdate = useRef(true);
+    const minBidEther = 0.00001;
 
     useEffect(() => {
-      handleValidateAmount(amount);
+      if(!firstUpdate.current) {
+        handleValidateAmount(amount);
+      }
+      firstUpdate.current = false;
     },[currency]);
 
     function handleValidateAmount(_amount: number) {
       if (_amount < 1 && currency === Currency.Split) {
           setAmount(1);
-      } else if (_amount < 0.000001 && currency === Currency.Ether) {
-          setAmount(0.000001);
+      } else if (_amount < minBidEther && currency === Currency.Ether) {
+          setAmount(minBidEther);
       } else if (_amount > splitBalance && currency === Currency.Split) {
           setAmount(Number((splitBalance - 0.01).toFixed(2)));
       } else if (_amount > ethBalance && currency === Currency.Ether) {
-          setAmount(Number((ethBalance - 0.000001).toFixed(6)));
+          setAmount(Number((ethBalance - minBidEther).toFixed(6)));
       } else if (_amount < 0) {
           setAmount(0);  
       } else {
@@ -122,7 +127,7 @@ const Segment = () => {
     function handleDoubleAmount() {
       const doubleAmount = amount * 2;
       if(doubleAmount > ethBalance && currency === Currency.Ether) {
-        setAmount(Number((ethBalance - 0.000001).toFixed(6)));
+        setAmount(Number((ethBalance - minBidEther).toFixed(6)));
       } else if (doubleAmount > splitBalance && currency === Currency.Split) {
         setAmount(Number((splitBalance - 0.01).toFixed(2)));
       } else {
@@ -131,7 +136,7 @@ const Segment = () => {
     }
     function handleMaxAmount() {
       if(currency === Currency.Ether) {
-        setAmount(Number((ethBalance - 0.000001).toFixed(6)));
+        setAmount(Number((ethBalance - minBidEther).toFixed(6)));
       } else if (currency === Currency.Split) {
         setAmount(Number((splitBalance - 0.01).toFixed(2)));
       }  
@@ -140,15 +145,15 @@ const Segment = () => {
         const halfAmount = amount / 2;
         if(halfAmount < 1 && currency === Currency.Split) {
           setAmount(1);
-        } else if (halfAmount < 0.000001 && currency === Currency.Ether) {
-          setAmount(0.000001);
+        } else if (halfAmount < minBidEther && currency === Currency.Ether) {
+          setAmount(minBidEther);
         } else {
           setAmount(Number(halfAmount.toFixed(currency === Currency.Ether? 6 : 2)));
         }
     }
     function handleMinAmount() {
         if(currency === Currency.Ether) {
-          setAmount(0.000001);
+          setAmount(minBidEther);
         } else if(currency === Currency.Split) {
           setAmount(1);  
         }
