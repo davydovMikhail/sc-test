@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/sc-test/static/css/main.0c62c6eb.css",
-    "main.js": "/sc-test/static/js/main.c1fe5185.js",
+    "main.css": "/sc-test/static/css/main.40ef1b48.css",
+    "main.js": "/sc-test/static/js/main.c6f8ccb2.js",
     "static/media/girl.png": "/sc-test/static/media/girl.ef8ddf9ca6f2abc87733.png",
     "static/media/Industry-MediumItalic.eot": "/sc-test/static/media/Industry-MediumItalic.de609e9ba054d33636a6.eot",
     "static/media/Industry-MediumItalic.ttf": "/sc-test/static/media/Industry-MediumItalic.c236890c83b4c3d72de1.ttf",
@@ -40,16 +40,20 @@
     "static/media/Industry-Black.woff": "/sc-test/static/media/Industry-Black.60cb97a201d9c96c8699.woff",
     "static/media/Industry-Bold.woff": "/sc-test/static/media/Industry-Bold.3ae5c06761f5a3726492.woff",
     "static/media/logo.svg": "/sc-test/static/media/logo.628ba055fb92bef7eb6710f4c17e8ed0.svg",
-    "static/media/win.svg": "/sc-test/static/media/win.cc27b5a02504edb3cba9fb315e02e8f6.svg",
+    "static/media/won.svg": "/sc-test/static/media/won.0bc7f3631e7f7ec6b60016d7cfaa1070.svg",
     "static/media/splitcur.svg": "/sc-test/static/media/splitcur.af6bed4d0fdec7efa0e6f7ea73ce34a2.svg",
+    "static/media/loader.svg": "/sc-test/static/media/loader.c849b7801b2e4e4609b2411b87ef910e.svg",
     "static/media/wallet.svg": "/sc-test/static/media/wallet.effd6ff356fd6e37ebdc729ffbd0c499.svg",
+    "static/media/start.svg": "/sc-test/static/media/start.a572aeb4705b355a37c8c8206f6d4958.svg",
+    "static/media/connect.svg": "/sc-test/static/media/connect.74abafd4ea22dd9dc6b95d57a7f4d112.svg",
     "index.html": "/sc-test/index.html",
     "static/media/ethcur.svg": "/sc-test/static/media/ethcur.05a3385acfc2d2974980b22e844a4a89.svg",
-    "main.0c62c6eb.css.map": "/sc-test/static/css/main.0c62c6eb.css.map",
-    "main.c1fe5185.js.map": "/sc-test/static/js/main.c1fe5185.js.map"
+    "static/media/lost.svg": "/sc-test/static/media/lost.682ebdf64860cf1e7d3316bf62e278dd.svg",
+    "main.40ef1b48.css.map": "/sc-test/static/css/main.40ef1b48.css.map",
+    "main.c6f8ccb2.js.map": "/sc-test/static/js/main.c6f8ccb2.js.map"
   },
   "entrypoints": [
-    "static/css/main.0c62c6eb.css",
-    "static/js/main.c1fe5185.js"
+    "static/css/main.40ef1b48.css",
+    "static/js/main.c6f8ccb2.js"
   ]
 }
