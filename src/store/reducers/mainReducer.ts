@@ -1,7 +1,7 @@
 import { MainState, MainAction, MainActionTypes, Status, Currency } from "../../types/main";
 
 const initialState: MainState = {
-    notification: "try your luck!",
+    notification: "TRY YOUR LUCK!",
     status: Status.Guess,
     currency: Currency.Split,
     segmentGames: [],

@@ -10,16 +10,16 @@ export const useBidSplit = () => {
   const { switchNetwork, account, activateBrowserWallet } = useEthers();
 
   return useCallback(
-    async (bid: string, point: string, right: boolean, eth: boolean) => {
+    async (bid: number, point: number, right: boolean, eth: boolean) => {
       if (!GameContract) return;
       await switchNetwork(Number(chain));
       activateBrowserWallet();
       try {
         let txPromise;
         if(eth) {
-            txPromise = await GameContract.bidSplit("0", point, right, {value: utils.parseEther(bid)});
+            txPromise = await GameContract.bidSplit("0", point, right, {value: utils.parseEther(bid.toString())});
         } else {
-            txPromise = await GameContract.bidSplit(utils.parseEther(bid), point, right);
+            txPromise = await GameContract.bidSplit(utils.parseEther(bid.toString()), point, right);
         }   
         const tx = await txPromise.wait();
         toast.success('BID DONE', {

@@ -2,15 +2,45 @@ import { useState, useEffect, useRef } from "react";
 import Currswitcher from "./currswitcher";
 import { useTypedSelector } from "../storeHooks/useTypedSelector";
 import { Currency } from "../types/main";
+import { useEthers } from "@usedapp/core";
+import { toast } from "react-toastify";
+import { useActions } from '../storeHooks/useActions';
+import { Status } from "../types/main";
+import { useGetAllowance } from "../hooks/useGetAllowance";
+import { useApproveToGame } from "../hooks/useApproveToGame";
+import { useGetLastSegmentID } from "../hooks/useGetLastSegmentID";
+import { useGetEtherBal } from "../hooks/useGetEtherBal";
+import { useGetTokenBal } from "../hooks/useGetTokenBal";
+import { useBidSegment } from "../hooks/useBidSegment";
+import { useGetCurrentBlockNumber } from "../hooks/useGetBlockNumber";
+import { usePlaySegment } from "../hooks/usePlaySegment";
+import { useGetRandomSegment } from "../hooks/useGetRandomSegment";
+import { useGetMaxEtherPayout } from "../hooks/useGetMaxEtherPayout";
+import { useGetMaxTokenPayout } from "../hooks/useGetMaxTokenPayout"; 
+import SetInterval from 'set-interval'
 
 const Segment = () => {
-    const { currency, ethBalance, splitBalance  } = useTypedSelector(state => state.main);
+    const { currency, ethBalance, splitBalance, maxEthPayout, maxSplitPayout, status } = useTypedSelector(state => state.main);
+    const { SetStatus, SetNotification, SetEthBal, SetSplitBal, SetEthPayout, SetSplitPayout } = useActions();
+    const { account } = useEthers();
 
     const [from, setFrom] = useState(2500);
     const [to, setTo] = useState(7500);
     const [amount, setAmount] = useState(1);
     const firstUpdate = useRef(true);
+    const firstIteration = useRef(true);
     const minBidEther = 0.00001;
+    const allowanceHook = useGetAllowance();
+    const approveHook = useApproveToGame();
+    const lastSegmentIDHook = useGetLastSegmentID();
+    const etherBalHook = useGetEtherBal();
+    const tokenBalHook = useGetTokenBal();
+    const bidHook = useBidSegment();
+    const blockHook = useGetCurrentBlockNumber();
+    const playHook = usePlaySegment();
+    const randomHook = useGetRandomSegment();
+    const maxPayoutEtherHook = useGetMaxEtherPayout();
+    const maxPayoutTokenHook = useGetMaxTokenPayout();
 
     useEffect(() => {
       if(!firstUpdate.current) {
@@ -27,7 +57,7 @@ const Segment = () => {
       } else if (_amount > splitBalance && currency === Currency.Split) {
           setAmount(Number((splitBalance - 0.01).toFixed(2)));
       } else if (_amount > ethBalance && currency === Currency.Ether) {
-          setAmount(Number((ethBalance - minBidEther).toFixed(6)));
+          setAmount(Number((ethBalance - minBidEther).toFixed(5)));
       } else if (_amount < 0) {
           setAmount(0);  
       } else {
@@ -127,7 +157,7 @@ const Segment = () => {
     function handleDoubleAmount() {
       const doubleAmount = amount * 2;
       if(doubleAmount > ethBalance && currency === Currency.Ether) {
-        setAmount(Number((ethBalance - minBidEther).toFixed(6)));
+        setAmount(Number((ethBalance - minBidEther).toFixed(5)));
       } else if (doubleAmount > splitBalance && currency === Currency.Split) {
         setAmount(Number((splitBalance - 0.01).toFixed(2)));
       } else {
@@ -136,7 +166,7 @@ const Segment = () => {
     }
     function handleMaxAmount() {
       if(currency === Currency.Ether) {
-        setAmount(Number((ethBalance - minBidEther).toFixed(6)));
+        setAmount(Number((ethBalance - minBidEther).toFixed(5)));
       } else if (currency === Currency.Split) {
         setAmount(Number((splitBalance - 0.01).toFixed(2)));
       }  
@@ -157,6 +187,108 @@ const Segment = () => {
         } else if(currency === Currency.Split) {
           setAmount(1);  
         }
+    }
+
+    async function handlePlay() {
+      const _from = from;
+      const _to = to;
+      if (!account) {
+        toast.info('FIRST CONNECT YOUR WALLET', {
+            position: "bottom-center",
+            autoClose: 1000,
+            hideProgressBar: true,
+            pauseOnHover: false,
+            draggable: true,
+            theme: "dark",
+        });
+        return;
+      }
+      if (
+        (splitBalance < amount && currency === Currency.Split) || 
+        (ethBalance < amount && currency === Currency.Ether)
+      ) {
+        toast.info('NOT ENOUGH BALANCE', {
+            position: "bottom-center",
+            autoClose: 1000,
+            hideProgressBar: true,
+            pauseOnHover: false,
+            draggable: true,
+            theme: "dark",
+        });
+        return;
+      }
+      if (
+        (amount < 1 && currency === Currency.Split) || 
+        (amount < minBidEther && currency === Currency.Ether)
+      ) {
+        toast.info(`MINIMUM BET IS ${currency === Currency.Ether ? minBidEther : 1} $${currency}`, {
+            position: "bottom-center",
+            autoClose: 1000,
+            hideProgressBar: true,
+            pauseOnHover: false,
+            draggable: true,
+            theme: "dark",
+        });
+        return;
+      }
+      if (
+        (maxEthPayout < (getPayuot() as number) && currency === Currency.Ether) ||
+        (maxSplitPayout < (getPayuot() as number) && currency === Currency.Split)
+      ) {
+        toast.info('PAYOUT EXCEED THE MAX PAYOUT', {
+          position: "bottom-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          pauseOnHover: false,
+          draggable: true,
+          theme: "dark",
+        });
+        return;
+      }
+      firstIteration.current = true;
+      SetStatus(Status.Loader);
+      if(currency === Currency.Split) {
+        if((await allowanceHook(account) as number) < amount) {
+          SetNotification('APPROVE YOUR $SPLIT TOKENS');
+          await approveHook();
+        }
+      }
+      SetNotification('CREATING A BID');
+      const idBefore = await lastSegmentIDHook(account);
+      const targetBlock = (await bidHook(amount, _from, _to, currency === Currency.Ether))?.blockNumber.toString() as string;
+      SetInterval.start(async () => {
+        const currentBlock = (await blockHook()) as number;
+        const idAfter = await lastSegmentIDHook(account);
+        if(idBefore !== idAfter && currentBlock > Number(targetBlock) && firstIteration.current) {
+          firstIteration.current = false;
+          SetInterval.clear('checkHash');
+          SetNotification('CONFIRM THE FUNCTION TO FIND OUT THE RESULT');
+          await playHook();
+          const randomNumber = await randomHook(targetBlock, account);
+          let balAfter: number;
+          if(currency === Currency.Split) {
+            balAfter = (await tokenBalHook(account as string)) as number;
+          } else {
+            balAfter = (await etherBalHook(account as string)) as number;
+          }          
+          if((randomNumber >= _from) && (randomNumber <= _to)) {
+            SetNotification(`WIN. RANDOM: ${randomNumber}`);
+            SetStatus(Status.Won);
+          } else {
+              SetNotification(`LOST. RANDOM: ${randomNumber}`);
+              SetStatus(Status.Fail);
+          }
+          if(currency === Currency.Split) {
+            SetSplitBal(balAfter);
+          } else {
+            SetEthBal(balAfter);
+          }
+          const maxEther = await maxPayoutEtherHook(); 
+          const maxToken = await maxPayoutTokenHook(); 
+          SetEthPayout(maxEther as number);
+          SetSplitPayout(maxToken as number);
+        }
+      }, 500, "checkHash")
     }
     
     return (
@@ -206,7 +338,11 @@ const Segment = () => {
                   }}  
                 />
               </div>
-              <button className="decision__play">
+              <button 
+                className="decision__play"
+                onClick={() => handlePlay()} 
+                disabled={status === Status.Loader}
+              >
                 play
               </button>
             </div>
@@ -219,7 +355,7 @@ const Segment = () => {
                   type="number" 
                   placeholder='FROM' 
                   className="segment__input" 
-                  value={from || ''}
+                  value={from !== 0 ? from || '' : "0"}
                   onChange={(e) => setFrom(Number(e.target.value))}  
                   onBlur={(e) => handleValidateFrom(Number(e.target.value))}  
                 />

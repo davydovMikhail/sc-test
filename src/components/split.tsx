@@ -2,14 +2,44 @@ import { useState, useEffect, useRef } from "react";
 import Currswitcher from "./currswitcher";
 import { useTypedSelector } from "../storeHooks/useTypedSelector";
 import { Currency } from "../types/main";
+import { useEthers } from "@usedapp/core";
+import { toast } from "react-toastify";
+import { useActions } from '../storeHooks/useActions';
+import { Status } from "../types/main";
+import { useGetAllowance } from "../hooks/useGetAllowance";
+import { useApproveToGame } from "../hooks/useApproveToGame";
+import { useGetLastSplitID } from "../hooks/useGetLastSplitID";
+import { useGetEtherBal } from "../hooks/useGetEtherBal";
+import { useGetTokenBal } from "../hooks/useGetTokenBal";
+import { useBidSplit } from "../hooks/useBidSplit";
+import { useGetCurrentBlockNumber } from "../hooks/useGetBlockNumber";
+import { usePlaySplit } from "../hooks/usePlaySplit";
+import { useGetRandomSplit } from "../hooks/useGetRandomSplit";
+import { useGetMaxEtherPayout } from "../hooks/useGetMaxEtherPayout";
+import { useGetMaxTokenPayout } from "../hooks/useGetMaxTokenPayout"; 
+import SetInterval from 'set-interval'
 
 const Split = () => {
-    const { currency, ethBalance, splitBalance } = useTypedSelector(state => state.main);
+    const { currency, ethBalance, splitBalance, maxEthPayout, maxSplitPayout, status } = useTypedSelector(state => state.main);
+    const { SetStatus, SetNotification, SetEthBal, SetSplitBal, SetEthPayout, SetSplitPayout } = useActions();
+    const { account } = useEthers();
 
     const [point, setPoint] = useState(500); 
     const [amount, setAmount] = useState(1);
     const firstUpdate = useRef(true);
+    const firstIteration = useRef(true);
     const minBidEther = 0.00001;
+    const allowanceHook = useGetAllowance();
+    const approveHook = useApproveToGame();
+    const lastSplitIDHook = useGetLastSplitID();
+    const etherBalHook = useGetEtherBal();
+    const tokenBalHook = useGetTokenBal();
+    const bidHook = useBidSplit();
+    const blockHook = useGetCurrentBlockNumber();
+    const playHook = usePlaySplit();
+    const randomHook = useGetRandomSplit();
+    const maxPayoutEtherHook = useGetMaxEtherPayout();
+    const maxPayoutTokenHook = useGetMaxTokenPayout();
 
     useEffect(() => {
       if(!firstUpdate.current) {
@@ -35,7 +65,7 @@ const Split = () => {
       } else if (_amount > splitBalance && currency === Currency.Split) {
           setAmount(Number((splitBalance - 0.01).toFixed(2)));
       } else if (_amount > ethBalance && currency === Currency.Ether) {
-          setAmount(Number((ethBalance - minBidEther).toFixed(6)));
+          setAmount(Number((ethBalance - minBidEther).toFixed(5)));
       } else if (_amount < 0) {
           setAmount(0);  
       } else {
@@ -84,7 +114,7 @@ const Split = () => {
     function handleDoubleAmount() {
       const doubleAmount = amount * 2;
       if(doubleAmount > ethBalance && currency === Currency.Ether) {
-        setAmount(Number((ethBalance - minBidEther).toFixed(6)));
+        setAmount(Number((ethBalance - minBidEther).toFixed(5)));
       } else if (doubleAmount > splitBalance && currency === Currency.Split) {
         setAmount(Number((splitBalance - 0.01).toFixed(2)));
       } else {
@@ -93,7 +123,7 @@ const Split = () => {
     }
     function handleMaxAmount() {
       if(currency === Currency.Ether) {
-        setAmount(Number((ethBalance - minBidEther).toFixed(6)));
+        setAmount(Number((ethBalance - minBidEther).toFixed(5)));
       } else if (currency === Currency.Split) {
         setAmount(Number((splitBalance - 0.01).toFixed(2)));
       }  
@@ -114,6 +144,108 @@ const Split = () => {
         } else if(currency === Currency.Split) {
           setAmount(1);  
         }
+    }
+
+    async function handlePlay(_right: boolean) {
+      const _point = point; 
+      if (!account) {
+        toast.info('FIRST CONNECT YOUR WALLET', {
+            position: "bottom-center",
+            autoClose: 1000,
+            hideProgressBar: true,
+            pauseOnHover: false,
+            draggable: true,
+            theme: "dark",
+        });
+        return;
+      }
+      if (
+        (splitBalance < amount && currency === Currency.Split) || 
+        (ethBalance < amount && currency === Currency.Ether)
+      ) {
+        toast.info('NOT ENOUGH BALANCE', {
+            position: "bottom-center",
+            autoClose: 1000,
+            hideProgressBar: true,
+            pauseOnHover: false,
+            draggable: true,
+            theme: "dark",
+        });
+        return;
+      }
+      if (
+        (amount < 1 && currency === Currency.Split) || 
+        (amount < minBidEther && currency === Currency.Ether)
+      ) {
+        toast.info(`MINIMUM BET IS ${currency === Currency.Ether ? minBidEther : 1} $${currency}`, {
+            position: "bottom-center",
+            autoClose: 1000,
+            hideProgressBar: true,
+            pauseOnHover: false,
+            draggable: true,
+            theme: "dark",
+        });
+        return;
+      }
+      const payout = _right ? getRightPayout() : getLeftPayout();
+      if (
+        (maxEthPayout < (payout as number) && currency === Currency.Ether) ||
+        (maxSplitPayout < (payout as number) && currency === Currency.Split)
+      ) {
+        toast.info('PAYOUT EXCEED THE MAX PAYOUT', {
+          position: "bottom-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          pauseOnHover: false,
+          draggable: true,
+          theme: "dark",
+        });
+        return;
+      }
+      firstIteration.current = true;
+      SetStatus(Status.Loader);
+      if(currency === Currency.Split) {
+        if((await allowanceHook(account) as number) < amount) {
+          SetNotification('APPROVE YOUR $SPLIT TOKENS');
+          await approveHook();
+        }
+      }
+      SetNotification('CREATING A BID');
+      const idBefore = await lastSplitIDHook(account);
+      const targetBlock = (await bidHook(amount, point, _right, currency === Currency.Ether))?.blockNumber.toString() as string;
+      SetInterval.start(async () => {
+        const currentBlock = (await blockHook()) as number;
+        const idAfter = await lastSplitIDHook(account);
+        if(idBefore !== idAfter && currentBlock > Number(targetBlock) && firstIteration.current) {
+          firstIteration.current = false;
+          SetInterval.clear('checkHash');
+          SetNotification('CONFIRM THE FUNCTION TO FIND OUT THE RESULT');
+          await playHook();
+          const randomNumber = await randomHook(targetBlock, account);
+          let balAfter: number;
+          if(currency === Currency.Split) {
+            balAfter = (await tokenBalHook(account as string)) as number;
+          } else {
+            balAfter = (await etherBalHook(account as string)) as number;
+          }
+          if((!_right && randomNumber < _point) || (_right && randomNumber >= _point)) {
+              SetNotification(`WIN. RANDOM: ${randomNumber}`);
+              SetStatus(Status.Won);
+          } else {
+              SetNotification(`LOST. RANDOM: ${randomNumber}`);
+              SetStatus(Status.Fail);
+          }
+          if(currency === Currency.Split) {
+            SetSplitBal(balAfter);
+          } else {
+            SetEthBal(balAfter);
+          }
+          const maxEther = await maxPayoutEtherHook(); 
+          const maxToken = await maxPayoutTokenHook(); 
+          SetEthPayout(maxEther as number);
+          SetSplitPayout(maxToken as number);
+        }
+      }, 500, "checkHash")
     }
     
     return (
@@ -146,10 +278,18 @@ const Split = () => {
                 </div>
               </div>
               <div className="decision">
-                <button className="decision__left">
+                <button 
+                  onClick={() => handlePlay(false)} 
+                  className="decision__left"
+                  disabled={status === Status.Loader}
+                >
                   left
                 </button>
-                <button className="decision__right">
+                <button 
+                  onClick={() => handlePlay(true)} 
+                  className="decision__right"
+                  disabled={status === Status.Loader}
+                >
                   right
                 </button>
               </div>

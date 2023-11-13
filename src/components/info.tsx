@@ -1,5 +1,9 @@
 import { useEffect } from "react"
-import win from "../img/win.svg";
+import start from "../img/start.svg";
+import connect from "../img/connect.svg";
+import loader from "../img/loader.svg";
+import won from "../img/won.svg";
+import lost from "../img/lost.svg";
 import wallet from "../img/wallet.svg";
 import Girl from "../img/girl.png";
 import { useTypedSelector } from '../storeHooks/useTypedSelector';
@@ -10,18 +14,33 @@ import { useGetMaxTokenPayout } from "../hooks/useGetMaxTokenPayout";
 import { useGetEtherBal } from "../hooks/useGetEtherBal";
 import { useGetTokenBal } from "../hooks/useGetTokenBal"; 
 import { useEthers } from "@usedapp/core";
+import { Status } from "../types/main";
 
 const Info = () => {
-    const { currency, notification, maxEthPayout, maxSplitPayout, ethBalance, splitBalance } = useTypedSelector(state => state.main);
+    const { currency, notification, maxEthPayout, maxSplitPayout, ethBalance, splitBalance, status } = useTypedSelector(state => state.main);
     const { SetEthPayout, SetSplitPayout, SetEthBal, SetSplitBal } = useActions();
     const { account } = useEthers();
 
+    function getIcon() {
+        if(!account) {
+            return connect
+        } else if (status == Status.Fail) {
+            return lost;
+        } else if (status == Status.Guess) {
+            return start
+        } else if (status == Status.Loader) {
+            return loader
+        } else if (status == Status.Won) {
+            return won;
+        }
+    }
+
     function maxPayout() {
-        return Currency.Ether === currency ? maxEthPayout.toFixed(6) : maxSplitPayout.toFixed(2);
+        return Currency.Ether === currency ? maxEthPayout.toFixed(5) : maxSplitPayout.toFixed(2);
     }
 
     function balance() {
-        return Currency.Ether === currency ? ethBalance.toFixed(6) : splitBalance.toFixed(2);
+        return Currency.Ether === currency ? ethBalance.toFixed(5) : splitBalance.toFixed(2);
     }
 
     const maxPayoutEtherHook = useGetMaxEtherPayout();
@@ -69,10 +88,12 @@ const Info = () => {
                     balance: {balance()} ${currency}
                 </div>
             </div>
-            <div className="info__text">
-                <img style={{marginRight: "12px"}} src={win} alt="" />
+            <div 
+                className={status === Status.Loader ? "info__pulse info__text" : "info__text"}
+            >
+                <img style={{marginRight: "12px"}} src={getIcon()} alt="" />
                 <div>
-                    {notification}
+                    {account ? notification : "connect your wallet"}
                 </div>
             </div>
         </div>

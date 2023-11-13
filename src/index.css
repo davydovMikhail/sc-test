@@ -426,7 +426,7 @@ textarea:focus, input:focus{
   max-width: 1498px;
   margin: 0 auto;
   padding-top: 220px;
-  background-color: rgba(40, 255, 87, 0.10);
+  /* background-color: rgba(40, 255, 87, 0.10); */
   padding-right: 15px;
   padding-left: 15px;
 }
@@ -509,6 +509,18 @@ textarea:focus, input:focus{
   font-weight: 400;
   line-height: 100%; /* 16px */
   text-transform: uppercase;
+}
+@-webkit-keyframes pulse {
+	0% { background-color: #000; }
+	100% { background-color: #191919; }
+}
+@keyframes pulse {
+	0% { background-color: #000; }
+	100% { background-color: #191919; }
+}
+.info__pulse {
+  -webkit-animation: pulse 400ms infinite alternate;
+	        animation: pulse 400ms infinite alternate;
 }
 .chance__text {
   color: var(--2, #FFF);
@@ -674,7 +686,6 @@ textarea:focus, input:focus{
 .game {
   max-width: 892px;
   width: 100%;
-  background-color: #0D0D0D;
 }
 
 .segment {
