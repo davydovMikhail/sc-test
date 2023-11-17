@@ -17,11 +17,12 @@ import { usePlaySplit } from "../hooks/usePlaySplit";
 import { useGetRandomSplit } from "../hooks/useGetRandomSplit";
 import { useGetMaxEtherPayout } from "../hooks/useGetMaxEtherPayout";
 import { useGetMaxTokenPayout } from "../hooks/useGetMaxTokenPayout"; 
+import { useGetTotalSplits } from "../hooks/useGetTotalSplits";
 import SetInterval from 'set-interval'
 
 const Split = () => {
     const { currency, ethBalance, splitBalance, maxEthPayout, maxSplitPayout, status } = useTypedSelector(state => state.main);
-    const { SetStatus, SetNotification, SetEthBal, SetSplitBal, SetEthPayout, SetSplitPayout } = useActions();
+    const { SetStatus, SetNotification, SetEthBal, SetSplitBal, SetEthPayout, SetSplitPayout, SetTotalSplits } = useActions();
     const { account } = useEthers();
 
     const [point, setPoint] = useState(500); 
@@ -40,6 +41,7 @@ const Split = () => {
     const randomHook = useGetRandomSplit();
     const maxPayoutEtherHook = useGetMaxEtherPayout();
     const maxPayoutTokenHook = useGetMaxTokenPayout();
+    const totalSplitsHook = useGetTotalSplits();
 
     useEffect(() => {
       if(!firstUpdate.current) {
@@ -244,6 +246,8 @@ const Split = () => {
           const maxToken = await maxPayoutTokenHook(); 
           SetEthPayout(maxEther as number);
           SetSplitPayout(maxToken as number);
+          const totalSplits = await totalSplitsHook();
+          SetTotalSplits(totalSplits);
         }
       }, 500, "checkHash")
     }

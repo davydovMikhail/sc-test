@@ -21,6 +21,9 @@ export interface MainState {
     splitBalance: number;
     maxEthPayout: number;
     maxSplitPayout: number;
+    advanced: boolean;
+    totalSplits: number;
+    totalSegments: number;
 }
 
 export enum MainActionTypes {
@@ -35,6 +38,9 @@ export enum MainActionTypes {
     SET_SPLIT_BAL = 'SET_SPLIT_BAL',
     SET_ETH_PAYOUT = 'SET_ETH_PAYOUT',
     SET_SPLIT_PAYOUT = 'SET_SPLIT_PAYOUT',
+    SET_ADVANCED = 'SET_ADVANCED',
+    SET_TOTAL_SPLITS = 'SET_TOTAL_SPLITS',
+    SET_TOTAL_SEGMENTS = 'SET_TOTAL_SEGMENTS'
 } 
 
 
@@ -80,6 +86,18 @@ interface SetSplitPayoutAction {
     type: MainActionTypes.SET_SPLIT_PAYOUT;
     payload: number;
 }
+interface SetAdvancedAction {
+    type: MainActionTypes.SET_ADVANCED;
+    payload: boolean;
+}
+interface SetTotalSplitsAction {
+    type: MainActionTypes.SET_TOTAL_SPLITS;
+    payload: number;
+}
+interface SetTotalSegmentsAction {
+    type: MainActionTypes.SET_TOTAL_SEGMENTS;
+    payload: number;
+}
 
 export type MainAction = 
     SetNotificationAction |
@@ -92,4 +110,7 @@ export type MainAction =
     SetEthBalAction |
     SetSplitBalAction |
     SetEthPayoutAction |
-    SetSplitPayoutAction;
+    SetSplitPayoutAction |
+    SetAdvancedAction |
+    SetTotalSplitsAction |
+    SetTotalSegmentsAction;

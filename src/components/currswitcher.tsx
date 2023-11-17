@@ -7,12 +7,12 @@ import { Status } from "../types/main";
 
 const Currswitcher = () => {
     const { SetCurrency } = useActions();
-    const { status } = useTypedSelector(state => state.main);
+    const { status, currency } = useTypedSelector(state => state.main);
     
     return (
         <div className="bid__switch">
             <button
-                className="bid__eth"
+                className={currency === Currency.Ether ? "bid__on" : "bid__off"}
                 onClick={() => {SetCurrency(Currency.Ether)}}
                 disabled={status === Status.Loader}
             >
@@ -20,7 +20,7 @@ const Currswitcher = () => {
                 <div>ETH</div>
             </button>
             <button 
-                className="bid__split"
+                className={currency === Currency.Split ? "bid__on" : "bid__off"}
                 onClick={() => {SetCurrency(Currency.Split)}}
                 disabled={status === Status.Loader}
             >

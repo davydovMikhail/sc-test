@@ -13,24 +13,26 @@ import { useGetMaxEtherPayout } from "../hooks/useGetMaxEtherPayout";
 import { useGetMaxTokenPayout } from "../hooks/useGetMaxTokenPayout"; 
 import { useGetEtherBal } from "../hooks/useGetEtherBal";
 import { useGetTokenBal } from "../hooks/useGetTokenBal"; 
+import { useGetTotalSplits } from "../hooks/useGetTotalSplits";
+import { useGetTotalSegments } from "../hooks/useGetTotalSegments";
 import { useEthers } from "@usedapp/core";
 import { Status } from "../types/main";
 
 const Info = () => {
     const { currency, notification, maxEthPayout, maxSplitPayout, ethBalance, splitBalance, status } = useTypedSelector(state => state.main);
-    const { SetEthPayout, SetSplitPayout, SetEthBal, SetSplitBal } = useActions();
+    const { SetEthPayout, SetSplitPayout, SetEthBal, SetSplitBal, SetTotalSplits, SetTotalSegments } = useActions();
     const { account } = useEthers();
 
     function getIcon() {
         if(!account) {
             return connect
-        } else if (status == Status.Fail) {
+        } else if (status === Status.Fail) {
             return lost;
-        } else if (status == Status.Guess) {
+        } else if (status === Status.Guess) {
             return start
-        } else if (status == Status.Loader) {
+        } else if (status === Status.Loader) {
             return loader
-        } else if (status == Status.Won) {
+        } else if (status === Status.Won) {
             return won;
         }
     }
@@ -43,6 +45,8 @@ const Info = () => {
         return Currency.Ether === currency ? ethBalance.toFixed(5) : splitBalance.toFixed(2);
     }
 
+    const totalSplitsHook = useGetTotalSplits();
+    const totalSegmentsHook = useGetTotalSegments();
     const maxPayoutEtherHook = useGetMaxEtherPayout();
     const maxPayoutTokenHook = useGetMaxTokenPayout();
     const balSplitHook = useGetTokenBal();
@@ -53,6 +57,15 @@ const Info = () => {
             const maxToken = await maxPayoutTokenHook(); 
             SetEthPayout(maxEther as number);
             SetSplitPayout(maxToken as number);
+        }
+        fetchData().catch(console.error);
+    },[]);
+    useEffect(() => {
+        const fetchData = async () => {
+            const totalSplits = await totalSplitsHook()
+            const totalSegments = await totalSegmentsHook();
+            SetTotalSplits(totalSplits);
+            SetTotalSegments(totalSegments);
         }
         fetchData().catch(console.error);
     },[]);

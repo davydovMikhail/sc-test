@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
 import Logo from "./img/logo.svg";
 import Info from './components/info';
 import Split from './components/split';
 import Segment from './components/segment';
+import Table from './components/table';
+import Tabs from './components/tabs';
+import Pagination from './components/pagination';
+import Footer from './components/footer';
 import { useEthers } from "@usedapp/core";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
@@ -14,13 +17,12 @@ import { useClaim } from './hooks/useClaim';
 import { useGetTokenBal } from "./hooks/useGetTokenBal"; 
 
 function App() {
-  const [advanced, setAdvanced] = useState(false);
-  const { splitBalance, status } = useTypedSelector(state => state.main);
-  const { SetSplitBal, SetNotification, SetStatus } = useActions();
+  const { splitBalance, status, advanced } = useTypedSelector(state => state.main);
+  const { SetSplitBal, SetNotification, SetStatus, SetAdvanced } = useActions();
   const { activateBrowserWallet, account } = useEthers();
   
   const advancedHandler = () => {
-    setAdvanced(!advanced)
+    SetAdvanced(!advanced)
   }
 
   const claimHook = useClaim();
@@ -57,7 +59,6 @@ function App() {
     SetNotification("TOKENS RECEIVED");
     SetStatus(Status.Won);
 }
-
 
   return (
     <>
@@ -110,6 +111,14 @@ function App() {
             }          
           </div>
         </div>
+        <div className="table-wrapper">
+            <Tabs />
+            <Table />
+            <div className="pagination-wrapper">
+              <Pagination />
+            </div>
+        </div>
+        <Footer />
       </main>
       <ToastContainer/>
     </>

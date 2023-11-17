@@ -17,11 +17,12 @@ import { usePlaySegment } from "../hooks/usePlaySegment";
 import { useGetRandomSegment } from "../hooks/useGetRandomSegment";
 import { useGetMaxEtherPayout } from "../hooks/useGetMaxEtherPayout";
 import { useGetMaxTokenPayout } from "../hooks/useGetMaxTokenPayout"; 
+import { useGetTotalSegments } from "../hooks/useGetTotalSegments";
 import SetInterval from 'set-interval'
 
 const Segment = () => {
     const { currency, ethBalance, splitBalance, maxEthPayout, maxSplitPayout, status } = useTypedSelector(state => state.main);
-    const { SetStatus, SetNotification, SetEthBal, SetSplitBal, SetEthPayout, SetSplitPayout } = useActions();
+    const { SetStatus, SetNotification, SetEthBal, SetSplitBal, SetEthPayout, SetSplitPayout, SetTotalSegments } = useActions();
     const { account } = useEthers();
 
     const [from, setFrom] = useState(2500);
@@ -41,6 +42,7 @@ const Segment = () => {
     const randomHook = useGetRandomSegment();
     const maxPayoutEtherHook = useGetMaxEtherPayout();
     const maxPayoutTokenHook = useGetMaxTokenPayout();
+    const totalSegmentsHook = useGetTotalSegments();
 
     useEffect(() => {
       if(!firstUpdate.current) {
@@ -287,6 +289,8 @@ const Segment = () => {
           const maxToken = await maxPayoutTokenHook(); 
           SetEthPayout(maxEther as number);
           SetSplitPayout(maxToken as number);
+          const totalSegments = await totalSegmentsHook();
+          SetTotalSegments(totalSegments);
         }
       }, 500, "checkHash")
     }

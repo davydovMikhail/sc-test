@@ -33,3 +33,12 @@ export function SetEthPayout(payout: number): MainAction {
 export function SetSplitPayout(payout: number): MainAction {
     return {type: MainActionTypes.SET_SPLIT_PAYOUT, payload: payout}
 }
+export function SetAdvanced(is: boolean): MainAction {
+    return {type: MainActionTypes.SET_ADVANCED, payload: is}
+}
+export function SetTotalSplits(amount: number): MainAction {
+    return {type: MainActionTypes.SET_TOTAL_SPLITS, payload: amount}
+}
+export function SetTotalSegments(amount: number): MainAction {
+    return {type: MainActionTypes.SET_TOTAL_SEGMENTS, payload: amount}
+}

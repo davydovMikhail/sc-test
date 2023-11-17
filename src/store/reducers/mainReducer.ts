@@ -9,7 +9,10 @@ const initialState: MainState = {
     ethBalance: 0,
     splitBalance: 0, 
     maxEthPayout: 0,
-    maxSplitPayout: 0
+    maxSplitPayout: 0,
+    advanced: false,
+    totalSplits: 0,
+    totalSegments: 0
 }
 
 export const mainReducer = (state: MainState = initialState, action: MainAction): MainState => {
@@ -36,6 +39,12 @@ export const mainReducer = (state: MainState = initialState, action: MainAction)
             return {...state, maxEthPayout: action.payload}
         case MainActionTypes.SET_SPLIT_PAYOUT:
             return {...state, maxSplitPayout: action.payload}
+        case MainActionTypes.SET_ADVANCED:
+            return {...state, advanced: action.payload}
+        case MainActionTypes.SET_TOTAL_SPLITS:
+            return {...state, totalSplits: action.payload}
+        case MainActionTypes.SET_TOTAL_SEGMENTS:
+            return {...state, totalSegments: action.payload}
         default:
             return state
     }
