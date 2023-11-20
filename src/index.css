@@ -28,6 +28,9 @@ body::-webkit-scrollbar-thumb {
 
 main {
   display: block;
+  background-image: url('./img/bg1.svg'), url('./img/bg2.svg');
+  background-position: 14% top, 86% bottom;
+  background-repeat: no-repeat, no-repeat;
 }
 h1 {
   font-size: 2em;
@@ -426,7 +429,6 @@ textarea:focus, input:focus{
   max-width: 1498px;
   margin: 0 auto;
   padding-top: 220px;
-  /* background-color: rgba(40, 255, 87, 0.10); */
   padding-right: 15px;
   padding-left: 15px;
 }
