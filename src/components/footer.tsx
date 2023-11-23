@@ -13,13 +13,13 @@ const Footer = () => {
                 Copyright 2023. SPLIT CASINO. All Rights Reserved.
             </div>
             <div className="footer__links">
-                <a target="_blank" href="https://twitter.com/" style={{marginRight: "8px"}}>
+                <a target="_blank" href="#" style={{marginRight: "8px"}}>
                     <img src={wp} alt="x"/>
                 </a>
-                <a target="_blank" href="https://twitter.com/" style={{marginRight: "8px"}}>
+                <a target="_blank" href="https://twitter.com/SplitCasino" style={{marginRight: "8px"}}>
                     <img src={x} alt="x"/>
                 </a>
-                <a target="_blank" href="https://t.me/">
+                <a target="_blank" href="https://t.me/splitcasinoeth">
                     <img src={tg} alt="tg"/>
                 </a>
             </div>

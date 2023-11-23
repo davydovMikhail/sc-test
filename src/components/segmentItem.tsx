@@ -53,7 +53,7 @@ const SegmentItem = (props: ISegment, index: number) => {
             <div className="table__cell">
                 <img onClick={() => copyToClipboard()} src={copyIcon} className="table__icon table__copy" alt="copy" />
                 <div className="table__text table__address">
-                    {props.player.slice(0, 5)}....{props.player.slice(-4)} {index}
+                    {props.player.slice(0, 5)}....{props.player.slice(-4)}
                 </div>
             </div>
             <div className="table__cell">
