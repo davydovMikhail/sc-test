@@ -38,11 +38,11 @@ const Info = () => {
     }
 
     function maxPayout() {
-        return Currency.Ether === currency ? maxEthPayout.toFixed(5) : maxSplitPayout.toFixed(2);
+        return Currency.Ether === currency ? maxEthPayout.toFixed(5) : maxSplitPayout.toFixed(0);
     }
 
     function balance() {
-        return Currency.Ether === currency ? ethBalance.toFixed(5) : splitBalance.toFixed(2);
+        return Currency.Ether === currency ? ethBalance.toFixed(5) : splitBalance.toFixed(0);
     }
 
     const totalSplitsHook = useGetTotalSplits();

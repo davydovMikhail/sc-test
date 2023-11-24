@@ -52,16 +52,18 @@ const Segment = () => {
     },[currency]);
 
     function handleValidateAmount(_amount: number) {
-      if (_amount < 1 && currency === Currency.Split) {
+      if (_amount < 0) {
+        setAmount(0);  
+      } else if (_amount < 1 && currency === Currency.Split) {
           setAmount(1);
       } else if (_amount < minBidEther && currency === Currency.Ether) {
           setAmount(minBidEther);
       } else if (_amount > splitBalance && currency === Currency.Split) {
-          setAmount(Number((splitBalance - 0.01).toFixed(2)));
+          const num = Number((splitBalance - 1).toFixed(0)); 
+          setAmount(num < 0 ? 1 : num);
       } else if (_amount > ethBalance && currency === Currency.Ether) {
-          setAmount(Number((ethBalance - minBidEther).toFixed(5)));
-      } else if (_amount < 0) {
-          setAmount(0);  
+          const num = Number((ethBalance - minBidEther).toFixed(5));
+          setAmount(num < 0 ? minBidEther : num);
       } else {
           setAmount(_amount);
       }
@@ -161,7 +163,7 @@ const Segment = () => {
       if(doubleAmount > ethBalance && currency === Currency.Ether) {
         setAmount(Number((ethBalance - minBidEther).toFixed(5)));
       } else if (doubleAmount > splitBalance && currency === Currency.Split) {
-        setAmount(Number((splitBalance - 0.01).toFixed(2)));
+        setAmount(Number((splitBalance - 1).toFixed(0)));
       } else {
           setAmount(doubleAmount);
       }
@@ -170,7 +172,7 @@ const Segment = () => {
       if(currency === Currency.Ether) {
         setAmount(Number((ethBalance - minBidEther).toFixed(5)));
       } else if (currency === Currency.Split) {
-        setAmount(Number((splitBalance - 0.01).toFixed(2)));
+        setAmount(Number((splitBalance - 1).toFixed(0)));
       }  
     }
     function handleHalfAmount() {
@@ -180,7 +182,7 @@ const Segment = () => {
         } else if (halfAmount < minBidEther && currency === Currency.Ether) {
           setAmount(minBidEther);
         } else {
-          setAmount(Number(halfAmount.toFixed(currency === Currency.Ether? 6 : 2)));
+          setAmount(Number(halfAmount.toFixed(currency === Currency.Ether? 6 : 0)));
         }
     }
     function handleMinAmount() {

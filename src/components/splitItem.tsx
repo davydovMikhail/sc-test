@@ -24,7 +24,7 @@ const SplitItem = (props: ISplit, index: number) => {
     }
 
     function payout() {
-        return props.native ? Number(formatEther(props.payout)).toFixed(4) : Number(formatEther(props.payout)).toFixed(2);
+        return props.native ? Number(formatEther(props.payout)).toFixed(4) : Number(formatEther(props.payout)).toFixed(0);
     }
 
     return (

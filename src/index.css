@@ -1022,16 +1022,19 @@ textarea:focus, input:focus{
   .footer-wrapper {
     height: 230px;
   }
-  .footer {
-    flex-direction: column;
-    align-items: start;
-  }
   .footer__text {
     margin-top: 20px;
     margin-bottom: 20px;
   }
 }
 @media (max-width: 809px) {
+  .footer {
+    flex-direction: column;
+    align-items: start;
+  }
+  .footer__logo {
+    margin-bottom: 20px;
+  }
   .range {
     margin-bottom: 16px;
   }

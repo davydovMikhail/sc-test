@@ -9,12 +9,12 @@ const Footer = () => {
         <div className="footer-wrapper">
             <div className="footer">
             <img src={logo} className="footer__logo" />
-            <div className="footer__text">
+            {/* <div className="footer__text">
                 Copyright 2023. SPLIT CASINO. All Rights Reserved.
-            </div>
+            </div> */}
             <div className="footer__links">
-                <a target="_blank" href="#" style={{marginRight: "8px"}}>
-                    <img src={wp} alt="x"/>
+                <a target="_blank" href="https://splitgamble.gitbook.io/docs/" style={{marginRight: "8px"}}>
+                    <img src={wp} alt="wp"/>
                 </a>
                 <a target="_blank" href="https://twitter.com/SplitCasino" style={{marginRight: "8px"}}>
                     <img src={x} alt="x"/>
