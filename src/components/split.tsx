@@ -122,6 +122,9 @@ const Split = () => {
     }
 
     function handleDoubleAmount() {
+      if(!_isAccount()) {
+        return;
+      }
       const doubleAmount = amount * 2;
       if(doubleAmount > ethBalance && currency === Currency.Ether) {
         setAmount(Number((ethBalance - minBidEther).toFixed(5)));
@@ -132,6 +135,9 @@ const Split = () => {
       }
     }
     function handleMaxAmount() {
+      if(!_isAccount()) {
+        return;
+      }
       if(currency === Currency.Ether) {
         setAmount(Number((ethBalance - minBidEther).toFixed(5)));
       } else if (currency === Currency.Split) {
@@ -139,6 +145,9 @@ const Split = () => {
       }  
     }
     function handleHalfAmount() {
+        if(!_isAccount()) {
+          return;
+        }
         const halfAmount = amount / 2;
         if(halfAmount < 1 && currency === Currency.Split) {
           setAmount(1);
@@ -149,11 +158,30 @@ const Split = () => {
         }
     }
     function handleMinAmount() {
+        if(!_isAccount()) {
+          return;
+        }
         if(currency === Currency.Ether) {
           setAmount(minBidEther);
         } else if(currency === Currency.Split) {
           setAmount(1);  
         }
+    }
+
+    function _isAccount() {
+      if (!account) {
+        toast.info('FIRST CONNECT YOUR WALLET', {
+            position: "bottom-center",
+            autoClose: 1000,
+            hideProgressBar: true,
+            pauseOnHover: false,
+            draggable: true,
+            theme: "dark",
+        });
+        return false;
+      } else {
+        return true;
+      }
     }
 
     async function handlePlay(_right: boolean) {
