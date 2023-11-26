@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.ab3233dc.css",
-    "main.js": "/static/js/main.76e8a5a6.js",
+    "main.css": "/static/css/main.049bc2bd.css",
+    "main.js": "/static/js/main.21019499.js",
     "static/media/girl.png": "/static/media/girl.ef8ddf9ca6f2abc87733.png",
     "static/media/Industry-MediumItalic.eot": "/static/media/Industry-MediumItalic.de609e9ba054d33636a6.eot",
     "static/media/Industry-MediumItalic.ttf": "/static/media/Industry-MediumItalic.c236890c83b4c3d72de1.ttf",
@@ -53,16 +53,17 @@
     "static/media/wallet.svg": "/static/media/wallet.fdcc9e7a56a2d5abbcf1c4aa4e2eedc1.svg",
     "static/media/connect.svg": "/static/media/connect.74abafd4ea22dd9dc6b95d57a7f4d112.svg",
     "static/media/miniTG.svg": "/static/media/miniTG.0a6545ece43fdbb90d9a42e338ce1060.svg",
+    "static/media/person.svg": "/static/media/person.28f34568935747a725e2b51f1d10f61b.svg",
     "index.html": "/index.html",
     "static/media/chevron.svg": "/static/media/chevron.e81f18e216308e7c52420a077f9077bf.svg",
-    "static/media/ethcur.svg": "/static/media/ethcur.05a3385acfc2d2974980b22e844a4a89.svg",
+    "static/media/ethcur.svg": "/static/media/ethcur.ff1e3088ed15020a6446a0dd2bb713d8.svg",
     "static/media/lost.svg": "/static/media/lost.682ebdf64860cf1e7d3316bf62e278dd.svg",
     "static/media/copy.svg": "/static/media/copy.c6139d27598377bc410ab0a7cd4fef31.svg",
-    "main.ab3233dc.css.map": "/static/css/main.ab3233dc.css.map",
-    "main.76e8a5a6.js.map": "/static/js/main.76e8a5a6.js.map"
+    "main.049bc2bd.css.map": "/static/css/main.049bc2bd.css.map",
+    "main.21019499.js.map": "/static/js/main.21019499.js.map"
   },
   "entrypoints": [
-    "static/css/main.ab3233dc.css",
-    "static/js/main.76e8a5a6.js"
+    "static/css/main.049bc2bd.css",
+    "static/js/main.21019499.js"
   ]
 }
