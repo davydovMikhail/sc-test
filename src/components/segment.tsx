@@ -125,7 +125,7 @@ const Segment = () => {
         }
         const numerator = currency === Currency.Ether ? 98 : 99.5;
         const answer = (amount * numerator) / getPercent();
-        return currency === Currency.Ether ? answer.toFixed(4) : answer.toFixed(2);
+        return currency === Currency.Ether ? answer.toFixed(5) : answer.toFixed(2);
     }
     function getWidthLeftDark() {
         const diff = to - from;

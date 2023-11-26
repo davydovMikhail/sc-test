@@ -92,13 +92,19 @@ const Split = () => {
         }
         return point / 10;
     }
+    function getSecondPercent() {
+        if(point < 50 || point > 950) {
+          return NaN
+        }
+        return (1000 - point) / 10;
+    }
     function getLeftPayout() {
         if(point < 50 || point > 950) {
           return NaN
         }
         const numerator = currency === Currency.Ether ? 98 : 99.5;
         const answer = (amount * numerator) / getPercent(); 
-        return currency === Currency.Ether ? answer.toFixed(4) : answer.toFixed(2);
+        return currency === Currency.Ether ? answer.toFixed(5) : answer.toFixed(2);
     }
     function getRightPayout() {
         if(point < 50 || point > 950) {
@@ -106,7 +112,7 @@ const Split = () => {
         }
         const numerator = currency === Currency.Ether ? 98 : 99.5;
         const answer = (amount * numerator) / (100 - getPercent()); 
-        return currency === Currency.Ether ? answer.toFixed(4) : answer.toFixed(2);
+        return currency === Currency.Ether ? answer.toFixed(5) : answer.toFixed(2);
     }
     function getWidth() {
         if (!getPercent()) {
@@ -267,7 +273,7 @@ const Split = () => {
               </div>
               <div className="chance__percent">
                 <div>{getPercent()} %</div>
-                <div>{(100 - getPercent()).toFixed(1)} %</div>
+                <div>{getSecondPercent()} %</div>
               </div>
               <div className="line">
                 <div style={{width: `${getWidth()}%`}} className="line__left"></div>

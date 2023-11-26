@@ -27,6 +27,10 @@ const SplitItem = (props: ISplit, index: number) => {
         return props.native ? Number(formatEther(props.payout)).toFixed(4) : Number(formatEther(props.payout)).toFixed(0);
     }
 
+    function percent() {
+        return props.right ? (1000 - Number(props.splitPoint)) / 10 : Number(props.splitPoint) / 10;
+    }
+
     return (
         <div 
             className="table__item" 
@@ -39,14 +43,14 @@ const SplitItem = (props: ISplit, index: number) => {
                 <div className="table__cell">
                     <img src={won} className="table__icon" alt='won' />
                     <div className="table__text">
-                        Won
+                        Won ({percent().toFixed(1)}%)
                     </div>
                 </div>
                 :  
                 <div className="table__cell">
                     <img src={lost} className="table__icon" alt='lose' />
                     <div className="table__text">
-                        Lose
+                        Lose ({percent().toFixed(1)}%)
                     </div>
                 </div>
             }

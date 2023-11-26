@@ -1,4 +1,5 @@
 import Logo from "./img/logo.svg";
+import Person from "./img/person.svg";
 import Info from './components/info';
 import Split from './components/split';
 import Segment from './components/segment';
@@ -85,7 +86,7 @@ function App() {
               </div>
             </div>
             <div className="header__right">
-              <a 
+              <div 
                 onClick={() => handleClaim()} 
                 style={{
                   marginRight: "8px",
@@ -93,10 +94,19 @@ function App() {
                 }} 
                 className="button__size button__transparent"
               >
+                <div>
                 CLAIM TEST
-              </a>
-              {account? <a className="button__size button__transparent">{account?.slice(0, 5)}...{account?.slice(-2)}</a> :
-                        <a style={{cursor: "pointer"}}  onClick={() => activateBrowserWallet()} className="button__size button__style">CONNECT WALLET</a>
+                </div> 
+              </div>
+              {account? <div className="button__size button__transparent">
+                          <img style={{marginRight: "10px"}} src={Person} alt="Person" />
+                          <div>
+                          {account?.slice(0, 5)}...{account?.slice(-2)}
+                          </div>
+                        </div> :
+                        <div style={{cursor: "pointer"}}  onClick={() => activateBrowserWallet()} className="button__size button__style">
+                          <div>CONNECT WALLET</div> 
+                        </div>
               }
             </div>
           </div>

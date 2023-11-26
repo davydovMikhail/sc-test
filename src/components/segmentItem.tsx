@@ -27,6 +27,10 @@ const SegmentItem = (props: ISegment, index: number) => {
         return props.native ? Number(formatEther(props.payout)).toFixed(4) : Number(formatEther(props.payout)).toFixed(0);
     }
 
+    function percent() {
+        return (Number(props.to) - Number(props.from)) / 100 
+    }
+
     return (
         <div 
             className="table__item" 
@@ -39,14 +43,14 @@ const SegmentItem = (props: ISegment, index: number) => {
                 <div className="table__cell">
                     <img src={won} className="table__icon" alt='won' />
                     <div className="table__text">
-                        Won
+                        Won ({percent().toFixed(2)}%)
                     </div>
                 </div>
                 :  
                 <div className="table__cell">
                     <img src={lost} className="table__icon" alt='lose' />
                     <div className="table__text">
-                        Lose
+                        Lose ({percent().toFixed(2)}%)
                     </div>
                 </div>
             }

@@ -343,7 +343,13 @@ body {
   display: flex;
   /* justify-content: flex-start; */
 }
+.header__right {
+  display: flex;
+}
 .button__size {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   font-size: 18px;
   max-height: 53px;
@@ -537,7 +543,7 @@ textarea:focus, input:focus{
   margin-bottom: 12px;
 }
 .chance__amount {
-  font-size: 64px;
+  font-size: 54px;
   font-style: italic;
   font-weight: 600;
   line-height: 100%; /* 64px */
@@ -1100,7 +1106,7 @@ textarea:focus, input:focus{
     margin-bottom: 8px;
   }
   .chance__amount {
-    font-size: 32px;
+    font-size: 24px;
     margin-bottom: 8px;
   }
   .chance__percent {
