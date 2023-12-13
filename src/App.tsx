@@ -88,11 +88,7 @@ function App() {
             <div className="header__right">
               <div 
                 onClick={() => handleClaim()} 
-                style={{
-                  marginRight: "8px",
-                  cursor: "pointer"
-                }} 
-                className="button__size button__transparent"
+                className="button__size button__transparent header__claim"
               >
                 <div>
                 CLAIM TEST

@@ -346,6 +346,10 @@ body {
 .header__right {
   display: flex;
 }
+.header__claim {
+  margin-right: 8px;
+  cursor: pointer;
+}
 .button__size {
   display: flex;
   align-items: center;
@@ -1041,6 +1045,10 @@ textarea:focus, input:focus{
   }
 }
 @media (max-width: 809px) {
+  .header__claim {
+    margin-right: 0px;
+    margin-bottom: 8px;
+  }
   .footer {
     flex-direction: column;
     align-items: start;
